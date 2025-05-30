@@ -22,6 +22,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import org.littletonrobotics.junction.Logger;
 import org.photonvision.PhotonCamera;
 
 /** IO implementation for real PhotonVision hardware. */
@@ -57,10 +58,11 @@ public class VisionIOPhotonVision implements VisionIO {
       } else {
         inputs.latestTargetObservation = new TargetObservation(new Rotation2d(), new Rotation2d());
       }
-
+      Logger.recordOutput("Vision/Branch", "None");
       // Add pose observation
       if (result.multitagResult.isPresent()) { // Multitag result
         var multitagResult = result.multitagResult.get();
+        Logger.recordOutput("Vision/Branch", "Multitag");
 
         // Calculate robot pose
         Transform3d fieldToCamera = multitagResult.estimatedPose.best;
@@ -88,6 +90,7 @@ public class VisionIOPhotonVision implements VisionIO {
 
       } else if (!result.targets.isEmpty()) { // Single tag result
         var target = result.targets.get(0);
+        Logger.recordOutput("Vision/Branch", "Singletag");
 
         // Calculate robot pose
         var tagPose = aprilTagLayout.getTagPose(target.fiducialId);
@@ -98,7 +101,7 @@ public class VisionIOPhotonVision implements VisionIO {
           Transform3d fieldToCamera = fieldToTarget.plus(cameraToTarget.inverse());
           Transform3d fieldToRobot = fieldToCamera.plus(robotToCamera.inverse());
           Pose3d robotPose = new Pose3d(fieldToRobot.getTranslation(), fieldToRobot.getRotation());
-
+          Logger.recordOutput("Vision/cameraToTarget", cameraToTarget);
           // Add tag ID
           tagIds.add((short) target.fiducialId);
 
@@ -126,6 +129,10 @@ public class VisionIOPhotonVision implements VisionIO {
     int i = 0;
     for (int id : tagIds) {
       inputs.tagIds[i++] = id;
+    }
+
+    if (inputs.poseObservations.length != 0) {
+      Logger.recordOutput("Vision/Distance", poseObservations.get(0).averageTagDistance());
     }
   }
 }
