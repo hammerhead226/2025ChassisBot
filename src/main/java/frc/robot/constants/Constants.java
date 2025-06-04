@@ -11,8 +11,10 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU General Public License for more details.
 
-package frc.robot;
+package frc.robot.constants;
 
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.wpilibj.RobotBase;
 
 /**
@@ -33,5 +35,13 @@ public final class Constants {
 
     /** Replaying from a log file. */
     REPLAY
+  }
+
+  public static final class FieldConstants {
+    // TODO: all of the apriltag Pose3d's need to be added
+    public static final Pose3d[] aprilTags = {
+      new Pose3d(16.70, 0.66, 1.49, new Rotation3d(0.00, 0.00, 126.00)),
+      new Pose3d(16.70, 7.40, 1.49, new Rotation3d(0.00, 0.00, -126.00))
+    };
   }
 }
