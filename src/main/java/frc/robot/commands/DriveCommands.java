@@ -293,4 +293,15 @@ public class DriveCommands {
     Rotation2d lastAngle = new Rotation2d();
     double gyroDelta = 0.0;
   }
+
+  /*
+   * translation:
+   * +x is forward relative to the robot's new rotation
+   * +y is left relative to the robot's new rotation
+   */
+  public static Pose2d rotateAndNudge(Pose2d pose, Translation2d translation, Rotation2d rotation) {
+    Rotation2d rotation2d = pose.getRotation().rotateBy(rotation);
+    Translation2d translation2d = pose.getTranslation().plus(translation.rotateBy(rotation2d));
+    return new Pose2d(translation2d, rotation2d);
+  }
 }

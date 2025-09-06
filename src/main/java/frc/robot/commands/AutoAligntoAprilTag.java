@@ -45,7 +45,7 @@ public class AutoAligntoAprilTag extends Command {
     Pose2d startPose = drive.getPose();
     Pose2d tagPose = Constants.FieldConstants.TAG_POSES[6].toPose2d();
     Pose2d endPose =
-        rotateAndNudge(
+        DriveCommands.rotateAndNudge(
             tagPose, new Translation2d(Meters.of(-0.30), Meters.of(0.00)), Rotation2d.k180deg);
     Logger.recordOutput("endPose", endPose);
 
@@ -86,16 +86,5 @@ public class AutoAligntoAprilTag extends Command {
   @Override
   public boolean isFinished() {
     return pathCommand.isFinished();
-  }
-
-  /*
-   * translation:
-   * +x is forward relative to the robot's new rotation
-   * +y is left relative to the robot's new rotation
-   */
-  public static Pose2d rotateAndNudge(Pose2d pose, Translation2d translation, Rotation2d rotation) {
-    Rotation2d rotation2d = pose.getRotation().rotateBy(rotation);
-    Translation2d translation2d = pose.getTranslation().plus(translation.rotateBy(rotation2d));
-    return new Pose2d(translation2d, rotation2d);
   }
 }
