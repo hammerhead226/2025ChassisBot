@@ -12,9 +12,12 @@ import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.path.RotationTarget;
 import com.pathplanner.lib.path.Waypoint;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.drive.Drive;
@@ -48,6 +51,14 @@ public class AutoAligntoAprilTag extends Command {
         DriveCommands.rotateAndNudge(
             tagPose, new Translation2d(Meters.of(-0.30), Meters.of(0.00)), Rotation2d.k180deg);
     Logger.recordOutput("endPose", endPose);
+
+    PIDController sensorForwardPID = new PIDController(0.1, 0, 0);
+    ProfiledPIDController odometryForwardPID =
+        new ProfiledPIDController(3, 1, 0.5, new TrapezoidProfile.Constraints(3, 4.5));
+    ProfiledPIDController odometrySidePID =
+        new ProfiledPIDController(3, 1, 0.5, new TrapezoidProfile.Constraints(3, 4.5));
+    ProfiledPIDController rotationPID =
+        new ProfiledPIDController(2.9, 0., 0.2, new TrapezoidProfile.Constraints(200, 300));
 
     List<RotationTarget> holomorphicRotations = new ArrayList<>();
     // Arrays.asList(new RotationTarget(0.5, Rotation2d.kZero));
