@@ -15,10 +15,10 @@ public class JoystickDrive extends Command {
 
   public JoystickDrive(
       Drive drive, Supplier<Translation2d> translationSupplier, DoubleSupplier omegaSupplier) {
+    addRequirements(drive);
     this.drive = drive;
     this.translationSupplier = translationSupplier;
     this.omegaSupplier = omegaSupplier;
-    addRequirements(drive);
   }
 
   @Override

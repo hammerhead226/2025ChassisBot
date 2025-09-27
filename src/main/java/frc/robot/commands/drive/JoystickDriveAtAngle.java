@@ -1,30 +1,23 @@
 package frc.robot.commands.drive;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.drive.Drive;
-import java.util.function.DoubleSupplier;
+import frc.robot.util.FieldMirroring;
 import java.util.function.Supplier;
 
 public class JoystickDriveAtAngle extends Command {
   private Drive drive;
-  private DoubleSupplier xSupplier;
-  private DoubleSupplier ySupplier;
+  private Supplier<Translation2d> translationSupplier;
   private Supplier<Rotation2d> rotationSupplier;
 
-  private static final double DEADBAND = 0.1;
-  private static final double ANGLE_KP = 5.0;
+  private static final double ANGLE_KP = 45.0;
   private static final double ANGLE_KD = 0.4;
-  private static final double ANGLE_MAX_VELOCITY = 8.0;
+  private static final double ANGLE_MAX_VELOCITY = 48.0;
   private static final double ANGLE_MAX_ACCELERATION = 20.0;
 
   // Create PID controller
@@ -37,12 +30,11 @@ public class JoystickDriveAtAngle extends Command {
    */
   public JoystickDriveAtAngle(
       Drive drive,
-      DoubleSupplier xSupplier,
-      DoubleSupplier ySupplier,
+      Supplier<Translation2d> translationSupplier,
       Supplier<Rotation2d> rotationSupplier) {
+    addRequirements(drive);
     this.drive = drive;
-    this.xSupplier = xSupplier;
-    this.ySupplier = ySupplier;
+    this.translationSupplier = translationSupplier;
     this.rotationSupplier = rotationSupplier;
     angleController =
         new ProfiledPIDController(
@@ -53,20 +45,6 @@ public class JoystickDriveAtAngle extends Command {
     angleController.enableContinuousInput(-Math.PI, Math.PI);
   }
 
-  private static Translation2d getLinearVelocityFromJoysticks(double x, double y) {
-    // Apply deadband
-    double linearMagnitude = MathUtil.applyDeadband(Math.hypot(x, y), DEADBAND);
-    Rotation2d linearDirection = new Rotation2d(Math.atan2(y, x));
-
-    // Square magnitude for more precise control
-    linearMagnitude = linearMagnitude * linearMagnitude;
-
-    // Return new linear velocity
-    return new Pose2d(new Translation2d(), linearDirection)
-        .transformBy(new Transform2d(linearMagnitude, 0.0, new Rotation2d()))
-        .getTranslation();
-  }
-
   @Override
   public void initialize() {
     angleController.reset(drive.getRotation().getRadians());
@@ -74,10 +52,6 @@ public class JoystickDriveAtAngle extends Command {
 
   @Override
   public void execute() {
-    // Get linear velocity
-    Translation2d linearVelocity =
-        getLinearVelocityFromJoysticks(xSupplier.getAsDouble(), ySupplier.getAsDouble());
-
     // Calculate angular speed
     double omega =
         angleController.calculate(
@@ -86,15 +60,11 @@ public class JoystickDriveAtAngle extends Command {
     // Convert to field relative speeds & send command
     ChassisSpeeds speeds =
         new ChassisSpeeds(
-            linearVelocity.getX() * drive.getMaxLinearSpeedMetersPerSec(),
-            linearVelocity.getY() * drive.getMaxLinearSpeedMetersPerSec(),
+            translationSupplier.get().getX() * drive.getMaxLinearSpeedMetersPerSec(),
+            translationSupplier.get().getY() * drive.getMaxLinearSpeedMetersPerSec(),
             omega);
-    boolean isFlipped =
-        DriverStation.getAlliance().isPresent()
-            && DriverStation.getAlliance().get() == Alliance.Red;
     drive.runVelocity(
         ChassisSpeeds.fromFieldRelativeSpeeds(
-            speeds,
-            isFlipped ? drive.getRotation().plus(new Rotation2d(Math.PI)) : drive.getRotation()));
+            speeds, drive.getRotation().plus(FieldMirroring.driverStationFacing())));
   }
 }
