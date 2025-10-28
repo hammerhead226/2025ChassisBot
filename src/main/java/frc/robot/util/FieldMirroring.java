@@ -23,8 +23,8 @@ public class FieldMirroring {
 
   public static Translation2d apply(Translation2d translation2d) {
     return shouldApply()
-      ? new Translation2d(FieldConstants.fieldLength - translation2d.getX(), translation2d.getY())
-      : translation2d;
+        ? new Translation2d(FieldConstants.fieldLength - translation2d.getX(), translation2d.getY())
+        : translation2d;
   }
 
   public static Pose2d apply(Pose2d pose2d) {
