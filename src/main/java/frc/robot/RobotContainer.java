@@ -176,9 +176,7 @@ public class RobotContainer {
                         new Translation2d(-controller.getLeftY(), -controller.getLeftX()))),
             () ->
                 new Rotation2d(
-                        ControlsUtil.applyDeadband(
-                            -controller.getRightY(), -controller.getRightX()),
-                        0.4)
+                            -controller.getRightY(), -controller.getRightX())
                     .plus(FieldMirroring.driverStationFacing())));
 
     // Lock to 0° when A button is held
