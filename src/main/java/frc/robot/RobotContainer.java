@@ -25,7 +25,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.AutoAligntoAprilTag;
 import frc.robot.commands.DriveCommands;
-import frc.robot.commands.drive.JoystickDriveAtAngle;
+import frc.robot.commands.drive.JoystickDrive;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
@@ -149,35 +149,31 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    // Default command, normal field-relative drive
-    // drive.setDefaultCommand(
-    //     DriveCommands.joystickDrive(
-    //         drive,
-    //         () -> -controller.getLeftY(),
-    //         () -> -controller.getLeftX(),
-    //         () -> -controller.getRightX()));
-
     // deadband and sqaure inputs for better control
-    // drive.setDefaultCommand(
-    //     new JoystickDrive(
-    //         drive,
-    //         () ->
-    //             ControlsUtil.squareNorm(
-    //                 ControlsUtil.applyDeadband(
-    //                     new Translation2d(-controller.getLeftY(), -controller.getLeftX()))),
-    //         () -> ControlsUtil.squareNorm(ControlsUtil.applyDeadband(controller.getRightX()))));
-
     drive.setDefaultCommand(
-        new JoystickDriveAtAngle(
+        new JoystickDrive(
             drive,
             () ->
                 ControlsUtil.squareNorm(
                     ControlsUtil.applyDeadband(
                         new Translation2d(-controller.getLeftY(), -controller.getLeftX()))),
-            () ->
-                new Rotation2d(
-                            -controller.getRightY(), -controller.getRightX())
-                    .plus(FieldMirroring.driverStationFacing())));
+            () -> ControlsUtil.squareNorm(ControlsUtil.applyDeadband(controller.getRightX()))));
+
+    // example usage of joystick drive at angle
+    // drive.setDefaultCommand(
+    //     new JoystickDriveAtAngle(
+    //         drive,
+    //         () ->
+    //             ControlsUtil.squareNorm(
+    //                 ControlsUtil.applyDeadband(
+    //                     new Translation2d(-controller.getLeftY(), -controller.getLeftX()))),
+    //         () -> {
+    //           Translation2d deadbandedControls =
+    //               ControlsUtil.applyDeadband(
+    //                   new Translation2d(controller.getRightX(), controller.getRightY()));
+    //           return new Rotation2d(-deadbandedControls.getY(), -deadbandedControls.getX())
+    //               .plus(FieldMirroring.driverStationFacing());
+    //         }));
 
     // Lock to 0° when A button is held
     controller.rightBumper().whileTrue(new AutoAligntoAprilTag(drive, vision));

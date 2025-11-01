@@ -15,9 +15,9 @@ public class JoystickDriveAtAngle extends Command {
   private Supplier<Translation2d> translationSupplier;
   private Supplier<Rotation2d> rotationSupplier;
 
-  private static final double ANGLE_KP = 45.0;
+  private static final double ANGLE_KP = 5.0;
   private static final double ANGLE_KD = 0.4;
-  private static final double ANGLE_MAX_VELOCITY = 48.0;
+  private static final double ANGLE_MAX_VELOCITY = 8.0;
   private static final double ANGLE_MAX_ACCELERATION = 20.0;
 
   // Create PID controller
