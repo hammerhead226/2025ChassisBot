@@ -1,7 +1,7 @@
 package frc.robot.subsystems.drive.Questnav;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import org.littletonrobotics.junction.AutoLog;
 
 public interface QuestnavIO {
@@ -15,8 +15,8 @@ public interface QuestnavIO {
     public int trackingLostCount; // log this
     public double latency; // error if it gets too high and don't accept estimations to the averager
     public double[] appTimestamps = new double[] {}; // log this
-    public Pose2d estimatedRobotPose;
-    public Rotation2d estimatedRotation;
+    public Pose3d estimatedRobotPose;
+    public Rotation3d estimatedRotation;
   }
 
   public default void updateInputs(QuestnavIOInputs inputs) {}

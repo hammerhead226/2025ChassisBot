@@ -5,11 +5,9 @@ import org.littletonrobotics.junction.Logger;
 
 public class Questnav extends SubsystemBase {
   private final QuestnavIO IO;
-  private final QuestnavIOInputsAutoLogged
-      input; // need to make this an autologged class but I don't know how to fix that
+  private final QuestnavIOInputsAutoLogged input;
 
-  public Questnav(
-      QuestnavIO IO, QuestnavIOInputsAutoLogged input) { // same as what I said above but here
+  public Questnav(QuestnavIO IO, QuestnavIOInputsAutoLogged input) {
     this.IO = IO;
     this.input = input;
   }
