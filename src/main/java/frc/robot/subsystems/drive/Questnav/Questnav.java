@@ -5,11 +5,10 @@ import org.littletonrobotics.junction.Logger;
 
 public class Questnav extends SubsystemBase {
   private final QuestnavIO IO;
-  private final QuestnavIOInputsAutoLogged input;
+  private final QuestnavIOInputsAutoLogged input = new QuestnavIOInputsAutoLogged();
 
-  public Questnav(QuestnavIO IO, QuestnavIOInputsAutoLogged input) {
+  public Questnav(QuestnavIO IO) {
     this.IO = IO;
-    this.input = input;
   }
 
   @Override

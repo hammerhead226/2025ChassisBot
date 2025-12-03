@@ -28,10 +28,12 @@ import frc.robot.commands.DriveCommands;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
-import frc.robot.subsystems.drive.GyroIOQuestnav;
+import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
+import frc.robot.subsystems.drive.Questnav.Questnav;
+import frc.robot.subsystems.drive.Questnav.QuestnavSystem;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionConstants;
 import frc.robot.subsystems.vision.VisionIO;
@@ -49,6 +51,7 @@ public class RobotContainer {
   // Subsystems
   private final Drive drive;
   private final Vision vision;
+  private final Questnav questnav;
 
   // Controller
   private final CommandXboxController controller = new CommandXboxController(0);
@@ -63,7 +66,7 @@ public class RobotContainer {
         // Real robot, instantiate hardware IO implementations
         drive =
             new Drive(
-                new GyroIOQuestnav(),
+                new GyroIOPigeon2(),
                 new ModuleIOTalonFX(TunerConstants.FrontLeft),
                 new ModuleIOTalonFX(TunerConstants.FrontRight),
                 new ModuleIOTalonFX(TunerConstants.BackLeft),
@@ -74,6 +77,8 @@ public class RobotContainer {
                 drive::addVisionMeasurement,
                 new VisionIOPhotonVision(
                     VisionConstants.photonCameraName, VisionConstants.robotToPhoton));
+
+        questnav = new Questnav(new QuestnavSystem());
 
         // vision =
         //     new Vision(
@@ -100,6 +105,8 @@ public class RobotContainer {
                     VisionConstants.robotToPhoton,
                     drive::getPose));
 
+        // TODO: make this not null
+        questnav = null;
         break;
 
       default:
@@ -113,6 +120,9 @@ public class RobotContainer {
                 new ModuleIO() {});
 
         vision = new Vision(drive::addVisionMeasurement, new VisionIO() {}, new VisionIO() {});
+
+        // TODO: make this not null
+        questnav = null;
         break;
     }
 
