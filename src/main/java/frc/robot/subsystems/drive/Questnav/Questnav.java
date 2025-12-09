@@ -15,8 +15,7 @@ public class Questnav extends SubsystemBase {
   public void periodic() {
     IO.commandPeriodic();
     IO.updateInputs(input);
-    Logger.processInputs("QuestNav", input);
-
+    Logger.processInputs("funnyIdea", input);
     // add alerts
 
   }

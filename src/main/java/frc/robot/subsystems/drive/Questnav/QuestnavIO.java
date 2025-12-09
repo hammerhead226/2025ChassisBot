@@ -22,4 +22,6 @@ public interface QuestnavIO {
   public default void updateInputs(QuestnavIOInputs inputs) {}
 
   public default void commandPeriodic() {}
+
+  public default void zeroCommand() {}
 }
