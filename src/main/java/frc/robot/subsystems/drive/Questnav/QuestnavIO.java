@@ -17,9 +17,12 @@ public interface QuestnavIO {
     public double[] appTimestamps = new double[] {}; // log this
     public Pose3d estimatedRobotPose;
     public Rotation3d estimatedRotation;
+    public Pose3d estimatedFieldPose;
   }
 
-  public default void updateInputs(QuestnavIOInputs inputs) {}
+  public default void updateInputs(QuestnavIOInputs inputs) {
+
+  }
 
   public default void commandPeriodic() {}
 
