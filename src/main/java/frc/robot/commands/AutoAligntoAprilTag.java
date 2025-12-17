@@ -46,7 +46,7 @@ public class AutoAligntoAprilTag extends Command {
   @Override
   public void initialize() {
     Pose2d startPose = drive.getPose();
-    Pose2d tagPose = Constants.FieldConstants.TAG_POSES[6].toPose2d();
+    Pose2d tagPose = Constants.FieldConstants.TAG_POSES[17].toPose2d();
     Pose2d endPose =
         DriveCommands.rotateAndNudge(
             tagPose, new Translation2d(Meters.of(-0.30), Meters.of(0.00)), Rotation2d.k180deg);

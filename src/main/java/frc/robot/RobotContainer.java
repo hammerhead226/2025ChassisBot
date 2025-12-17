@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.AutoAligntoAprilTag;
@@ -166,6 +167,8 @@ public class RobotContainer {
 
     // Lock to 0° when A button is held
     controller.rightBumper().whileTrue(new AutoAligntoAprilTag(drive, vision));
+    controller.leftBumper().onTrue(new InstantCommand(() -> questnav.zero()));
+
     controller
         .a()
         .whileTrue(

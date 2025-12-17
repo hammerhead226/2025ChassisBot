@@ -42,12 +42,15 @@ public class QuestnavSystem implements QuestnavIO {
       inputs.estimatedRobotPose = estimatedRobotPose;
       inputs.estimatedRotation = questPose.transformBy(questRobotPose.inverse()).getRotation();
 
-      inputs.estimatedFieldPose = new Pose3d(estimatedRobotPose.getX() * -1,
-      estimatedRobotPose.getY() * -1,
-      estimatedRobotPose.getZ() * -1, new Rotation3d(estimatedRobotRotation.getMeasureX().minus(Degrees.of(180)),
-        estimatedRobotRotation.getMeasureY().minus(Degrees.of(180)),
-        estimatedRobotRotation.getMeasureZ().minus(Degrees.of(180))
-      ));
+      inputs.estimatedFieldPose =
+          new Pose3d(
+              estimatedRobotPose.getX() * -1,
+              estimatedRobotPose.getY() * -1,
+              estimatedRobotPose.getZ() * -1,
+              new Rotation3d(
+                  estimatedRobotRotation.getMeasureX().minus(Degrees.of(180)),
+                  estimatedRobotRotation.getMeasureY().minus(Degrees.of(180)),
+                  estimatedRobotRotation.getMeasureZ().minus(Degrees.of(180))));
     }
   }
 

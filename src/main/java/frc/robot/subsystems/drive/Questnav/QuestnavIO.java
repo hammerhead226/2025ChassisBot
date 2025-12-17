@@ -20,9 +20,7 @@ public interface QuestnavIO {
     public Pose3d estimatedFieldPose;
   }
 
-  public default void updateInputs(QuestnavIOInputs inputs) {
-
-  }
+  public default void updateInputs(QuestnavIOInputs inputs) {}
 
   public default void commandPeriodic() {}
 

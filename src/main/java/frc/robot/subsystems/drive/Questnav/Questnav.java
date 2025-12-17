@@ -20,6 +20,10 @@ public class Questnav extends SubsystemBase {
 
   }
 
+  public void zero() {
+    IO.zeroCommand();
+  }
+
   public boolean isTrustworthy() {
     return (input.isConnected && input.latency < 10 && input.frameCount > 60 && input.tracking);
   }
