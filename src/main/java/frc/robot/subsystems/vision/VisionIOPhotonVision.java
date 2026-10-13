@@ -135,4 +135,8 @@ public class VisionIOPhotonVision implements VisionIO {
       Logger.recordOutput("Vision/Distance", poseObservations.get(0).averageTagDistance());
     }
   }
+
+  public Pose3d objectToRobot(){
+                                                                                                                                    
+  }
 }
